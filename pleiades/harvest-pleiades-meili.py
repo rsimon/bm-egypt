@@ -6,9 +6,6 @@ import time
 
 CSV_PATH = '../BM_place_terms_egypt.csv'
 
-SOURCE = 'GEONAMES'
-# SOURCE = 'WIKIPEDIA'
-
 """
 Reads BM places CSV
 """
@@ -24,12 +21,12 @@ def read_csv():
     return data
 
 """
-Queries GeoNames API (endpoint configurable - searchJSON or wikipediaSearchJSON)
+Queries Meilisearch
 """
-def search_geonames(query, endpoint):
+def search_meilisearch(query):
   q_escaped = urllib.parse.quote(query)
 
-  url = f'http://api.geonames.org/{endpoint}?q={q_escaped}&countryBias=EG&username=aboutgeo'
+  url = f'http://localhost:7700/indexes/pleiades/search?q={q_escaped}&hitsPerPage=100'
   response = requests.get(url)
 
   if response.status_code == 200:
@@ -37,28 +34,30 @@ def search_geonames(query, endpoint):
   else:
     print('Error')
 
+records = read_csv()
+
 """
 Script starts here!
 """
-records = read_csv()
-
 for record in records:
   system_id = record['System ID'] 
   place_name = record['Place name']
 
-  endpoint = 'searchJSON' if SOURCE == 'GEONAMES' else 'wikipediaSearchJSON'
+  discriminator = record['Discriminator']
 
-  results = search_geonames(place_name, endpoint)
+  query = record['Place name'] + ' ' + discriminator if len(discriminator) > 0 else record['Place name']
+  
+  results = search_meilisearch(query)
 
-  with open(f'./results/responses_{SOURCE.lower()}/{system_id}.json', 'w') as file:
+  with open(f'./results/responses/{system_id}.json', 'w') as file:
     merged = {
-      'query': place_name,
+      'query': query,
       'record': record,
       'results': results
     }
 
     json.dump(merged, file, indent = 2)
 
-  time.sleep(0.25)
+  time.sleep(0.1)
 
 print('Done.')
