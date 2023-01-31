@@ -58,7 +58,7 @@ for row in places:
 
 print('Writing JSON')
 
-with open(f'./pleiades_joined.json', 'w') as file:
+with open(f'./data/pleiades_joined.json', 'w') as file:
   json.dump(records, file, indent = 2)
 
 print('Done.')

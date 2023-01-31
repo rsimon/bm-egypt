@@ -11,6 +11,8 @@ file is named after the BM System ID number <system-id>.json. There are two scri
 
 - Harvester for the standard GeoNames `searchJSON` endpoint
 - Harvester for the `wikipediaSearchJSON` GeoNames Wikipedia search
+- Utility scripts `reconcile_geonames.py` and `reconcile_wikipedia.py` that filter the API
+  responses, pick the most plausible one for each place, and produce a flat CSV result file. 
 
 ## Pleiades
 
@@ -22,3 +24,5 @@ and the [Pleiades GIS data download](https://atlantides.org/downloads/pleiades/g
 - Deployment of Meilisearch via a `docker-compose.yml` file. Run `docker compose up`, Meilisearch is at 
   <http://localhost:7700>. With Meilisearch running, run the `index-pleiades.py` script.
 - The `harvest-pleiades-meili.py` script harvests candidate results for each place name in the BM CSV.
+- Utility script `reconcile_pleiades.py` which filters the responses, picks the most plausible one
+  and produces a flat CSV result file.

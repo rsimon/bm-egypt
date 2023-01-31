@@ -8,7 +8,7 @@ MEILISEARCH_URL = 'http://localhost:7700'
 INDEX_UID = 'pleiades'
 
 # CSV file path
-JSON_FILE = './pleiades_joined.json'
+JSON_FILE = './data/pleiades_joined.json'
 
 # Open the CSV file
 with open(JSON_FILE, 'r') as file:
