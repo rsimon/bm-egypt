@@ -26,3 +26,8 @@ and the [Pleiades GIS data download](https://atlantides.org/downloads/pleiades/g
 - The `harvest-pleiades-meili.py` script harvests candidate results for each place name in the BM CSV.
 - Utility script `reconcile_pleiades.py` which filters the responses, picks the most plausible one
   and produces a flat CSV result file.
+
+## Joined Results
+
+The script `join_results.py` will read the three individual result files (GeoNames, Wikipedia, Pleiades)
+and produce one joint CSV.

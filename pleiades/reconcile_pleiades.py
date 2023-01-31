@@ -98,7 +98,7 @@ for row in bm_places:
   else:
     misses += 1
 
-with open('./results/reconciled-pleiades.csv', 'w') as csvfile:
+with open('./results/reconciled_pleiades.csv', 'w') as csvfile:
   csv_columns = [
     'System ID',
     'Place name',
