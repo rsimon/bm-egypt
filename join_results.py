@@ -4,6 +4,7 @@ PATH_BM_PLACES = './BM_place_terms_egypt.csv'
 PATH_GEONAMES  = './geonames/results/reconciled_geonames.csv'
 PATH_WIKIPEDIA = './geonames/results/reconciled_wikipedia.csv'
 PATH_PLEIADES  = './pleiades/results/reconciled_pleiades.csv'
+PATH_TM        = './trismegistos/results/reconciled_trismegistos.csv'
 
 """
 Reads a CSV file
@@ -24,6 +25,7 @@ bm_places = read_csv(PATH_BM_PLACES)
 results_gn = read_csv(PATH_GEONAMES)
 results_wp = read_csv(PATH_WIKIPEDIA)
 results_pl = read_csv(PATH_PLEIADES)
+results_tm = read_csv(PATH_TM)
 
 """
 Script starts here!
@@ -38,16 +40,19 @@ for idx, row in enumerate(bm_places):
   row_gn = results_gn[idx]
   row_wp = results_wp[idx]
   row_pl = results_pl[idx]
+  row_tm = results_tm[idx]
 
   row.update(row_gn)
   row.update(row_wp)
   row.update(row_pl)
+  row.update(row_tm)
 
   no_gn = len(row['GeoNames URI'].strip()) == 0
   no_wp = len(row['Wikipedia URI'].strip()) == 0
   no_pl = len(row['Pleiades URI'].strip()) == 0
+  no_tm = len(row['TM URI'].strip()) == 0
 
-  if no_gn and no_wp and no_pl:
+  if no_gn and no_wp and no_pl and no_tm:
     complete_misses += 1
 
 # Log stats
@@ -85,7 +90,13 @@ csv_columns = [
   'Pleiades Lat',
   'Pleiades Lng',
   'Pleiades Description',
-  'Pleiades Names'
+  'Pleiades Names',
+  'TM Score',
+  'TM URI',
+  'TM Standard Name',
+  'TM Full Name',
+  'TM Lat',
+  'TM Lng'
 ]
 
 with open('./reconciled_all.csv', 'w') as csvfile:
