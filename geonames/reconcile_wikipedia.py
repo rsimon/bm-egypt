@@ -23,6 +23,20 @@ def load(system_id):
   with open('./results/responses_wikipedia/' + system_id + '.json') as f:
     return json.load(f)
 
+def is_in_bounds(record):
+  min_lat = 21.62
+  min_lon = 24.70
+  max_lat = 31.76
+  max_lon = 34.97
+
+  lat = record['lat'] if 'lat' in record else None
+  lon = record['lng'] if 'lng' in record else None
+
+  if lat and lon:
+    return lat >= min_lat and lat <= max_lat and lon >= min_lon and lon <= max_lon
+  else:
+    return True
+
 """
 Reduces the list of candidates to the most 'plausible' one, using
 simple fuzzy string matching heuristics.
@@ -34,6 +48,8 @@ def reduce_wikipedia_record(record):
   for candidate in record['results']['geonames']:
     # Original place name from the BM CSV
     if 'countryCode' in candidate and candidate['countryCode'] != 'EG':
+      top_scores.append(0)
+    elif not is_in_bounds(candidate):
       top_scores.append(0)
     else:
       place_name = record['record']['Place name']

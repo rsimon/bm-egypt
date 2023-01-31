@@ -24,6 +24,20 @@ def load(system_id):
   with open('./results/responses/' + system_id + '.json') as f:
     return json.load(f)
 
+def is_in_bounds(record):
+  min_lat = 21.62
+  min_lon = 24.70
+  max_lat = 31.76
+  max_lon = 34.97
+
+  lat = float(record['lat']) if ('lat' in record and len(record['lat']) > 0) else None
+  lon = float(record['lon']) if ('lon' in record and len(record['lon']) > 0) else None
+
+  if lat and lon:
+    return lat >= min_lat and lat <= max_lat and lon >= min_lon and lon <= max_lon
+  else:
+    return True
+
 """
 Reduces the list of candidates to the most 'plausible' one, using
 simple fuzzy string matching heuristics.
@@ -33,28 +47,31 @@ def reduce_pleiades_record(record):
   top_scores = []
 
   for candidate in record['results']['hits']:
-    # Original place name from the BM CSV
-    place_name = record['record']['Place name']
+    if is_in_bounds(candidate):
+      # Original place name from the BM CSV
+      place_name = record['record']['Place name']
 
-    # All names from this candidate
-    title = candidate['title']
-    names = candidate['names']
+      # All names from this candidate
+      title = candidate['title']
+      names = candidate['names']
 
-    top_score = 0
+      top_score = 0
 
-    for n in names:
-      similarity = fuzz.token_sort_ratio(place_name, n) / 100
+      for n in names:
+        similarity = fuzz.token_sort_ratio(place_name, n) / 100
 
-      if similarity > top_score:
-        top_score = similarity
+        if similarity > top_score:
+          top_score = similarity
 
-    # "Boost" title, by multiplying the title similarity with the highest scoring name
-    top_score = top_score * fuzz.token_sort_ratio(place_name, title)
+      # "Boost" title, by multiplying the title similarity with the highest scoring name
+      top_score = top_score * fuzz.token_sort_ratio(place_name, title)
 
-    if place_name in candidate['description']:
-      top_score *= 2 # Boost!
+      if place_name in candidate['description']:
+        top_score *= 2 # Boost!
 
-    top_scores.append(round(min(100, top_score)))
+      top_scores.append(round(min(100, top_score)))
+    else:
+      top_scores.append(0)
 
   # Return top scoring candidate
   top_score = 0
