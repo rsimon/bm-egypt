@@ -6,7 +6,8 @@ import json
 Reads BM places CSV
 """
 def load_bm_places():
-  with open('../BM_place_terms_egypt.csv', newline='', encoding='utf-8') as file:
+  # with open('../BM_place_terms_egypt.csv', newline='', encoding='utf-8') as file:
+  with open('../BM_pre_cleaned_terms_upper_egypt.csv', newline='', encoding='utf-8') as file:
     reader = csv.DictReader(file)
 
     data = []
@@ -20,7 +21,7 @@ def load_bm_places():
 Loads one data file
 """
 def load(system_id):
-  with open('./results/responses_wikipedia/' + system_id + '.json') as f:
+  with open('./results/batch_pre_cleaned/responses_wikipedia/' + system_id + '.json') as f:
     return json.load(f)
 
 def is_in_bounds(record):
@@ -53,19 +54,29 @@ def reduce_wikipedia_record(record):
       top_scores.append(0)
     else:
       place_name = record['record']['Place name']
+      use_for = record['record']['Use For']
 
       title = candidate['title']
       summary = candidate['summary'] if 'summary' in candidate else ''
 
       # Compute a score for each candidate: title ratio via fuzzwuzzy *
       # ratio of exact mentions in summary
+      # title_similarity = fuzz.token_sort_ratio(place_name, title) 
 
-      title_similarity = fuzz.token_sort_ratio(place_name, title) 
+      tokens = place_name.split() + use_for.split('~')
+      summary_mentions = 0
+      for token in tokens:
+        if fuzz.partial_ratio(token, summary) >= 70:
+          summary_mentions += 1
 
-      summary_mentions = summary.count(place_name)
-      summary_ratio = (len(place_name) * summary_mentions / len(summary)) if len(summary) > 0 else 0
+      if (record['record']['System ID'] == 'x30713'):
+        print(summary_mentions)
 
-      top_scores.append(title_similarity + summary_ratio)
+      # summary_mentions = summary.count(place_name)
+      # summary_ratio = (len(place_name) * summary_mentions / len(summary)) if len(summary) > 0 else 0
+      summary_ratio = 100 * summary_mentions / len(tokens)
+
+      top_scores.append(summary_ratio)
 
   # Return top scoring candidate
   top_score = 0
@@ -76,7 +87,7 @@ def reduce_wikipedia_record(record):
       top_score = s
       top_candidate = record['results']['geonames'][idx]
 
-  if top_candidate and top_score > 48:
+  if top_candidate: # and top_score > 48:
     top_candidate['score'] = top_score
     return top_candidate
   else:
@@ -111,7 +122,7 @@ for row in bm_places:
   else:
     misses += 1
 
-with open('./results/reconciled_wikipedia.csv', 'w') as csvfile:
+with open('./results/batch_pre_cleaned/reconciled_wikipedia.csv', 'w') as csvfile:
   csv_columns = [
     'System ID',
     'Place name',

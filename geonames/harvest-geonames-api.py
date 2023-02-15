@@ -4,7 +4,8 @@ import requests
 import urllib.parse
 import time
 
-CSV_PATH = '../BM_place_terms_egypt.csv'
+# CSV_PATH = '../BM_place_terms_egypt.csv'
+CSV_PATH = '../BM_pre_cleaned_terms_upper_egypt.csv'
 
 # SOURCE = 'GEONAMES'
 SOURCE = 'WIKIPEDIA'
@@ -50,7 +51,7 @@ for record in records:
 
   results = search_geonames(place_name, endpoint)
 
-  with open(f'./results/responses_{SOURCE.lower()}/{system_id}.json', 'w') as file:
+  with open(f'./results/batch_pre_cleaned/responses_{SOURCE.lower()}/{system_id}.json', 'w') as file:
     merged = {
       'query': place_name,
       'record': record,
