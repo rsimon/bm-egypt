@@ -7,8 +7,8 @@ import time
 # CSV_PATH = '../BM_place_terms_egypt.csv'
 CSV_PATH = '../BM_pre_cleaned_terms_upper_egypt.csv'
 
-# SOURCE = 'GEONAMES'
-SOURCE = 'WIKIPEDIA'
+SOURCE = 'GEONAMES'
+# SOURCE = 'WIKIPEDIA'
 
 """
 Reads BM places CSV

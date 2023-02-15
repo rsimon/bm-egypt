@@ -56,7 +56,7 @@ def reduce_wikipedia_record(record):
       place_name = record['record']['Place name']
       use_for = record['record']['Use For']
 
-      title = candidate['title']
+      # title = candidate['title']
       summary = candidate['summary'] if 'summary' in candidate else ''
 
       # Compute a score for each candidate: title ratio via fuzzwuzzy *
@@ -68,9 +68,6 @@ def reduce_wikipedia_record(record):
       for token in tokens:
         if fuzz.partial_ratio(token, summary) >= 70:
           summary_mentions += 1
-
-      if (record['record']['System ID'] == 'x30713'):
-        print(summary_mentions)
 
       # summary_mentions = summary.count(place_name)
       # summary_ratio = (len(place_name) * summary_mentions / len(summary)) if len(summary) > 0 else 0
@@ -87,7 +84,7 @@ def reduce_wikipedia_record(record):
       top_score = s
       top_candidate = record['results']['geonames'][idx]
 
-  if top_candidate: # and top_score > 48:
+  if top_candidate and top_score > 40:
     top_candidate['score'] = top_score
     return top_candidate
   else:

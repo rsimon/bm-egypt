@@ -9,7 +9,8 @@ alt_names = {}
 Reads BM places CSV
 """
 def load_bm_places():
-  with open('../BM_place_terms_egypt.csv', newline='', encoding='utf-8') as file:
+  # with open('../BM_place_terms_egypt.csv', newline='', encoding='utf-8') as file:
+  with open('../BM_pre_cleaned_terms_upper_egypt.csv', newline='', encoding='utf-8') as file:
     reader = csv.DictReader(file)
 
     data = []
@@ -38,7 +39,7 @@ def load_names():
 Loads one data file
 """
 def load(system_id):
-  with open('./results/responses_geonames/' + system_id + '.json') as f:
+  with open('./results/batch_pre_cleaned/responses_geonames/' + system_id + '.json') as f:
     return json.load(f)
 
 """
@@ -51,6 +52,7 @@ def reduce_geonames_record(record):
 
   # Original place name from the BM CSV
   place_name = record['record']['Place name']
+  use_for = record['record']['Use For']
 
   for candidate in record['results']['geonames']:
     if 'countryCode' in candidate and candidate['countryCode'] != 'EG':
@@ -62,13 +64,18 @@ def reduce_geonames_record(record):
       candidate_titles = [ candidate['toponymName'], candidate['name'] ]
       candidate_names = alt_names[id] if id in alt_names else []
 
+      tokens = place_name.split() + use_for.split('~')
+
       top_score = 0
 
       for n in candidate_titles + candidate_names:
-        similarity = fuzz.token_sort_ratio(place_name, n)
+        for token in tokens:
+          similarity = fuzz.token_sort_ratio(token, n)
 
-        if similarity > top_score:
-          top_score = similarity
+          # similarity = fuzz.token_sort_ratio(place_name, n)
+
+          if similarity > top_score:
+            top_score = similarity
 
       top_scores.append(top_score)
 
@@ -120,7 +127,7 @@ for row in bm_places:
   else:
     misses += 1
 
-with open('./results/reconciled_geonames.csv', 'w') as csvfile:
+with open('./results/batch_pre_cleaned/reconciled_geonames.csv', 'w') as csvfile:
   csv_columns = [
     'System ID',
     'Place name',
