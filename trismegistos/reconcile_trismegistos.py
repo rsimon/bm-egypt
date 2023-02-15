@@ -1,13 +1,13 @@
 import csv
 from fuzzywuzzy import fuzz
 import json
-import os
 
 """
 Reads BM places CSV
 """
 def load_bm_places():
-  with open('../BM_place_terms_egypt.csv', newline='', encoding='utf-8') as file:
+  # with open('../BM_place_terms_egypt.csv', newline='', encoding='utf-8') as file:
+  with open('../BM_pre_cleaned_terms_upper_egypt.csv', newline='', encoding='utf-8') as file:
     reader = csv.DictReader(file)
 
     data = []
@@ -21,7 +21,7 @@ def load_bm_places():
 Loads one data file
 """
 def load(system_id):
-  with open('./results/responses/' + system_id + '.json') as f:
+  with open('./results/responses_pre_cleaned/' + system_id + '.json') as f:
     return json.load(f)
 
 def get_coords(record):
@@ -137,7 +137,7 @@ for row in bm_places:
   else:
     misses += 1
 
-with open('./results/reconciled_trismegistos.csv', 'w') as csvfile:
+with open('./results/reconciled_trismegistos_pre_cleaned.csv', 'w') as csvfile:
   csv_columns = [
     'System ID',
     'Place name',
