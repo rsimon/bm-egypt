@@ -1,10 +1,16 @@
 import csv 
 
-PATH_BM_PLACES = './BM_place_terms_egypt.csv'
-PATH_GEONAMES  = './geonames/results/reconciled_geonames.csv'
-PATH_WIKIPEDIA = './geonames/results/reconciled_wikipedia.csv'
-PATH_PLEIADES  = './pleiades/results/reconciled_pleiades.csv'
-PATH_TM        = './trismegistos/results/reconciled_trismegistos.csv'
+# PATH_BM_PLACES = './BM_place_terms_egypt.csv'
+# PATH_GEONAMES  = './geonames/results/reconciled_geonames.csv'
+# PATH_WIKIPEDIA = './geonames/results/reconciled_wikipedia.csv'
+# PATH_PLEIADES  = './pleiades/results/reconciled_pleiades.csv'
+# PATH_TM        = './trismegistos/results/reconciled_trismegistos.csv'
+
+PATH_BM_PLACES = './BM_pre_cleaned_terms_upper_egypt.csv'
+PATH_GEONAMES  = './geonames/results/batch_pre_cleaned/reconciled_geonames.csv'
+PATH_WIKIPEDIA = './geonames/results/batch_pre_cleaned/reconciled_wikipedia.csv'
+PATH_PLEIADES  = './pleiades/results/reconciled_pleiades_pre_cleaned.csv'
+PATH_TM        = './trismegistos/results/reconciled_trismegistos_pre_cleaned.csv'
 
 """
 Reads a CSV file
@@ -99,7 +105,7 @@ csv_columns = [
   'TM Lng'
 ]
 
-with open('./reconciled_all.csv', 'w') as csvfile:
+with open('./reconciled_pre_cleaned_all.csv', 'w') as csvfile:
   writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
   writer.writeheader()
 
