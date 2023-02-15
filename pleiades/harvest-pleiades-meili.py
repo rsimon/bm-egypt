@@ -4,7 +4,8 @@ import requests
 import urllib.parse
 import time
 
-CSV_PATH = '../BM_place_terms_egypt.csv'
+# CSV_PATH = '../BM_place_terms_egypt.csv'
+CSV_PATH = '../BM_pre_cleaned_terms_upper_egypt.csv'
 
 """
 Reads BM places CSV
@@ -49,7 +50,7 @@ for record in records:
   
   results = search_meilisearch(query)
 
-  with open(f'./results/responses/{system_id}.json', 'w') as file:
+  with open(f'./results/responses_pre_cleaned/{system_id}.json', 'w') as file:
     merged = {
       'query': query,
       'record': record,
