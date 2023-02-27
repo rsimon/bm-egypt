@@ -19,15 +19,17 @@
   const DEFAULT_ZOOM = 6;
 
   const addData = () => {
-    map.addSource('data-source', {
-      type: 'geojson',
-      data: $store
-    });
+    $store.forEach((layer, idx) => {
+      map.addSource(`data-source-${idx}`, {
+        type: 'geojson',
+        data: layer
+      });
 
-    map.addLayer({
-      ...pointStyle,
-      id: 'data',
-      source: 'data-source'
+      map.addLayer({
+        ...pointStyle,
+        id: `data-${idx}`,
+        source: `data-source-${idx}`
+      });
     });
   }
 
@@ -46,7 +48,7 @@
 
   onDestroy(() => map.remove());
 
-  $: map?.getSource('data-source')?.setData($store);
+  $: $store.forEach((layer, idx) => map?.getSource(`data-source-${idx}`)?.setData(layer));
 </script>
 
 <div class="map" bind:this={container}>

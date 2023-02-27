@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import Papa from 'papaparse';
+import { CSV_FILES } from './config';
 
 const hasCoordinates = row =>
   row['GeoNames lng'] && row['GeoNames lat'];
@@ -20,43 +21,20 @@ const toGeoJSON = rows => ({
       ]
     }
   }))
-})
-
-const EMPTY_GEOJSON = {
-  type: 'FeatureCollection',
-  features: []
-};
-
-const HASH_CONFIG = window.location.hash.substring(1)
-  .split('&')
-  .filter(n => n)
-  .map(str => str.split('='))
-  .reduce((obj, tuple) => {
-    obj[tuple[0]] = tuple[1];
-    return obj;
-  }, {});
-
-console.log(HASH_CONFIG);
-
-// Which files to load on startup
-const CSV_FILES = [];
-
-// Which coordinate sources to map
-const COORDINATE_SOURCE_DB = []
-
-// Color by FILE or DB
-const COLOR_BY = 'FILE';
+});
 
 const createStore = () => {
 
-	const { subscribe, set } = writable(EMPTY_GEOJSON);
+	const { subscribe, update } = writable([]);
 
-  Papa.parse('reconciled_all.csv', {
-    download: true,
-    header: true,
-    complete: function(results) {
-      set(toGeoJSON(results.data));
-    }
+  CSV_FILES.forEach(f => {
+    Papa.parse(f, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        update(layers => [...layers, toGeoJSON(results.data) ]);
+      }
+    })
   });
 
 	return {
