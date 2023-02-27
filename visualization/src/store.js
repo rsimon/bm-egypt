@@ -27,6 +27,26 @@ const EMPTY_GEOJSON = {
   features: []
 };
 
+const HASH_CONFIG = window.location.hash.substring(1)
+  .split('&')
+  .filter(n => n)
+  .map(str => str.split('='))
+  .reduce((obj, tuple) => {
+    obj[tuple[0]] = tuple[1];
+    return obj;
+  }, {});
+
+console.log(HASH_CONFIG);
+
+// Which files to load on startup
+const CSV_FILES = [];
+
+// Which coordinate sources to map
+const COORDINATE_SOURCE_DB = []
+
+// Color by FILE or DB
+const COLOR_BY = 'FILE';
+
 const createStore = () => {
 
 	const { subscribe, set } = writable(EMPTY_GEOJSON);
