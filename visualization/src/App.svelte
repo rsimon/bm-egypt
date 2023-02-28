@@ -14,9 +14,9 @@
 
 	const STYLE = `https://api.maptiler.com/maps/outdoor/style.json?key=${API_KEY}`;
 
-	const DEFAULT_LON = 17.0;
-  const DEFAULT_LAT = 41.5;
-  const DEFAULT_ZOOM = 6;
+	const DEFAULT_LON = 31.0;
+  const DEFAULT_LAT = 26.5;
+  const DEFAULT_ZOOM = 5;
 
   const addData = () => {
     $store.forEach((layer, idx) => {
