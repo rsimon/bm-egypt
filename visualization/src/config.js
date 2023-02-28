@@ -11,7 +11,7 @@ const HASH_CONFIG = window.location.hash.substring(1)
 export const CSV_FILES = HASH_CONFIG.files ? HASH_CONFIG.files.split(',').map(str => str.trim()) : ['reconciled_all.csv']
 
 // Which coordinate sources to map
-export const COORDINATE_SOURCE_DB = [ 'GeoNames' ]
+export const COORDINATE_SOURCES = [ 'Wikipedia', 'GeoNames', 'Pleiades', 'TM' ];
 
 // Color by FILE or DB
 export const COLOR_BY = 'FILE';

@@ -1,26 +1,50 @@
 import { writable } from 'svelte/store';
 import Papa from 'papaparse';
-import { CSV_FILES } from './config';
+import { CSV_FILES, COORDINATE_SOURCES } from './config';
 
-const hasCoordinates = row =>
-  row['GeoNames lng'] && row['GeoNames lat'];
+/**
+ * Returns the coordinates for the give source from the CSV row.
+ */
+const getCoordinatesForSource = (row, source) => {
+  const lng = row[`${source} Lng`]?.trim();
+  const lat = row[`${source} Lat`]?.trim();
+
+  return (lng && lat) ? [ parseFloat(lng), parseFloat(lat) ] : null;
+}
+
+/**
+ * Returns coordinates from any of the configured sources, in order
+ * of configured priority.
+ */
+const getCoordinates = row =>
+  COORDINATE_SOURCES.reduce((result, source) => {
+    if (result) {
+      // Already found - skip further searches
+      return result;
+    } else {
+      const coordinates = getCoordinatesForSource(row, source);
+      return coordinates ? { source, coordinates } : null;
+    }
+  }, null);
 
 const toGeoJSON = rows => ({
   type: 'FeatureCollection',
-  features: rows.filter(hasCoordinates).map(row => ({
-    id: row['System ID'],
-    type: 'Feature',
-    properties: {
-      ...row
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [
-        parseFloat(row['GeoNames lng']),
-        parseFloat(row['GeoNames lat']) 
-      ]
-    }
-  }))
+  features: rows.map(row => {
+    const result = getCoordinates(row);
+
+    return result ? {
+      id: row['System ID'],
+      type: 'Feature',
+      properties: {
+        'Coord Source': result.source,
+        ...row
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: result.coordinates
+      }
+    } : null;
+  }).filter(n => n) // Remove null
 });
 
 const createStore = () => {
