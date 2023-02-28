@@ -1,3 +1,4 @@
 dist
 *.csv
+!docs/*.csv
 *.json
