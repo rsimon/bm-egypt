@@ -1,6 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { Map, NavigationControl, Popup } from 'maplibre-gl';
+  import Legend from './Legend.svelte';
   import { store } from './store';
   import { pointStyle } from './style';
 
@@ -72,9 +73,8 @@
   $: $store.forEach((layer, idx) => map?.getSource(`data-source-${idx}`)?.setData(layer));
 </script>
 
-<div class="map" bind:this={container}>
-
-</div>
+<div class="map" bind:this={container}></div>  
+<Legend />
 
 <style>
   .map {
