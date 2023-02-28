@@ -5,5 +5,12 @@ export default defineConfig({
   plugins: [ svelte({}) ],
   server: {
     open: '/public/index.html'
+  }, 
+  build: {
+    rollupOptions: {
+      input: {
+        main: './public/index.html'
+      }
+    }
   }
 });
