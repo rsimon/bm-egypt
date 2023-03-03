@@ -13,6 +13,9 @@
     return s;
   }, {});
 
+  const format = filename => 
+    filename.substring(0, filename.indexOf('.')).replaceAll('_', ' ')
+
   const toggle = layer => () => {
     const visible = !state[layer];
 
@@ -34,7 +37,7 @@
           {/if}
         </button>
 
-        <span class="label">{file}</span>
+        <span class="label">{format(file)}</span>
       </li>
     {/each}
   </ul>
@@ -67,6 +70,10 @@
   button {
     all: unset;
     cursor: pointer;
+  }
+
+  .label {
+    text-transform: capitalize;
   }
 
   :global(.legend.by-dataset li svg) {

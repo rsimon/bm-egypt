@@ -8,10 +8,13 @@ const HASH_CONFIG = window.location.hash.substring(1)
   }, {});
 
 // Which files to load on startup
-export const CSV_FILES = HASH_CONFIG.files ? HASH_CONFIG.files.split(',').map(str => str.trim()) : ['reconciled_all.csv']
+export const CSV_FILES = 
+  HASH_CONFIG.files ? HASH_CONFIG.files.split(',').map(str => str.trim()) : 
+  [ 'Middle_Egypt_Coordinates.csv' ];
+  // ['reconciled_all.csv']
 
 // Which coordinate sources to map
-export const COORDINATE_SOURCES = [ 'Wikipedia', 'GeoNames', 'Pleiades', 'TM' ];
+export const COORDINATE_SOURCES = [ 'BM', 'Wikipedia', 'GeoNames', 'Pleiades', 'TM' ];
 
 // Color by FILE or DB
 export const COLOR_BY = 'FILE';

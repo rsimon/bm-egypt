@@ -9,7 +9,7 @@ const getCoordinatesForSource = (row, source) => {
   const lng = row[`${source} Lng`]?.trim();
   const lat = row[`${source} Lat`]?.trim();
 
-  return (lng && lat) ? [ parseFloat(lng), parseFloat(lat) ] : null;
+  return (lng && lat) ? [ parseFloat(lng.replaceAll(',', '.')), parseFloat(lat.replaceAll(',', '.')) ] : null;
 }
 
 /**
@@ -49,14 +49,17 @@ const toGeoJSON = rows => ({
 
 const createStore = () => {
 
-	const { subscribe, update } = writable([]);
+	const { subscribe, update } = writable({});
 
   CSV_FILES.forEach(f => {
     Papa.parse(f, {
       download: true,
       header: true,
       complete: function(results) {
-        update(layers => [...layers, toGeoJSON(results.data) ]);
+        update(layers => ({
+          ...layers, 
+          [f]: toGeoJSON(results.data)
+        }));
       }
     })
   });

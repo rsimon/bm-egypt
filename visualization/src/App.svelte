@@ -20,16 +20,18 @@
   const DEFAULT_ZOOM = 5;
 
   const addData = () => {
-    $store.forEach((layer, idx) => {
-      map.addSource(`data-source-${idx}`, {
-        type: 'geojson',
-        data: layer
+    Object.entries($store).forEach(([name, data]) => {      
+      map.addSource(`source-${name}`, {
+        type: 'geojson', data
       });
 
       map.addLayer({
         ...pointStyle,
-        id: `data-${idx}`,
-        source: `data-source-${idx}`
+        id: name,
+        source: `source-${name}`,
+        layout: {
+          visibility: 'visible'
+        }
       });
     });
   }
@@ -53,6 +55,11 @@
     }
   }
 
+  const onChangeLayer = ({ detail }) => {
+    const { layer, visible } = detail;
+    map.setLayoutProperty(layer, 'visibility', visible ? 'visible' : 'none');
+  }
+
   onMount(() => {
     map = new Map({
       container,
@@ -70,12 +77,12 @@
 
   onDestroy(() => map.remove());
 
-  $: $store.forEach((layer, idx) => map?.getSource(`data-source-${idx}`)?.setData(layer));
+  $: Object.entries($store).forEach(([name, data]) => map?.getSource(`source-${name}`)?.setData(data));
 </script>
 
 <div class="map" bind:this={container} />
   
-<Legend />
+<Legend on:change={onChangeLayer} />
 
 <style>
   .map {
