@@ -27,7 +27,7 @@ const getCoordinates = row =>
     }
   }, null);
 
-const toGeoJSON = rows => ({
+const toGeoJSON = (filename, rows) => ({
   type: 'FeatureCollection',
   features: rows.map(row => {
     const result = getCoordinates(row);
@@ -37,6 +37,7 @@ const toGeoJSON = rows => ({
       type: 'Feature',
       properties: {
         'Coord Source': result.source,
+        'File': filename,
         ...row
       },
       geometry: {
@@ -58,7 +59,7 @@ const createStore = () => {
       complete: function(results) {
         update(layers => ({
           ...layers, 
-          [f]: toGeoJSON(results.data)
+          [f]: toGeoJSON(f, results.data)
         }));
       }
     })

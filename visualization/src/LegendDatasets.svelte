@@ -35,9 +35,9 @@
           {:else}
             <Icon src={ImCheckboxUnchecked} />
           {/if}
+          
+          <span class="label">{format(file)}</span>
         </button>
-
-        <span class="label">{format(file)}</span>
       </li>
     {/each}
   </ul>

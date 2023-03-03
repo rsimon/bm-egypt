@@ -4,6 +4,7 @@
   import Legend from './LegendDatasets.svelte';
   import { store } from './store';
   import { PALETTE, pointStyle } from './style';
+  import { CSV_FILES } from './config';
 
   import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -40,7 +41,7 @@
 
   const onClick = evt => {
     const features = map.queryRenderedFeatures(evt.point)
-      .filter(f => f.layer.id.startsWith('data-'));
+      .filter(f => CSV_FILES.includes(f.layer.id));
     
     if (features.length > 0) {
       const { properties } = features[0];
