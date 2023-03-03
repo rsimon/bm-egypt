@@ -10,7 +10,7 @@ const HASH_CONFIG = window.location.hash.substring(1)
 // Which files to load on startup
 export const CSV_FILES = 
   HASH_CONFIG.files ? HASH_CONFIG.files.split(',').map(str => str.trim()) : 
-  [ 'Middle_Egypt_Coordinates.csv' ];
+  [ 'raw_data_(machine_only).csv', 'pre_cleaned.csv', 'middle_egypt_coordinates_(manual).csv' ];
   // ['reconciled_all.csv']
 
 // Which coordinate sources to map

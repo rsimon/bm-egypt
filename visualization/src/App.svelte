@@ -3,7 +3,7 @@
   import { Map, NavigationControl, Popup } from 'maplibre-gl';
   import Legend from './LegendDatasets.svelte';
   import { store } from './store';
-  import { pointStyle } from './style';
+  import { PALETTE, pointStyle } from './style';
 
   import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -20,13 +20,15 @@
   const DEFAULT_ZOOM = 5;
 
   const addData = () => {
-    Object.entries($store).forEach(([name, data]) => {      
+    Object.entries($store).forEach(([name, data], idx) => {      
       map.addSource(`source-${name}`, {
         type: 'geojson', data
       });
 
+      const color = PALETTE[idx];
+
       map.addLayer({
-        ...pointStyle,
+        ...pointStyle(color),
         id: name,
         source: `source-${name}`,
         layout: {

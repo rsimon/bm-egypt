@@ -1,4 +1,4 @@
-import { COORDINATE_SOURCES } from './config';
+import chroma from 'chroma-js';
 
 export const PALETTE = [
   '#fd7f6f',
@@ -12,21 +12,12 @@ export const PALETTE = [
   '#8bd3c7'
 ];
 
-const MATCH_LIST = COORDINATE_SOURCES.reduce((list, source, idx) => {
-  return [...list, source, PALETTE[idx]];
-}, []);
-
-export const pointStyle = {
+export const pointStyle = color => ({
   'type': 'circle',
   'paint': {
     'circle-radius': 6,
-    'circle-color': [ // '#eb585b',
-      'match',
-      ['get', 'Coord Source'],
-      ...MATCH_LIST,
-      '#cccccc' // fallback    
-    ],
-    'circle-stroke-color': '#472a2d' ,
+    'circle-color': color,
+    'circle-stroke-color': chroma(color).darken().darken().hex(),
     'circle-stroke-width': 1
   }
-} 
+})

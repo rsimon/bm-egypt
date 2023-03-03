@@ -1,8 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import Icon from 'svelte-icons-pack/Icon.svelte';
-  import IoCheckbox from 'svelte-icons-pack/io/IoCheckbox';
-  import IoCheckboxOutline from 'svelte-icons-pack/io/IoCheckboxOutline';
+  import ImCheckboxChecked from 'svelte-icons-pack/im/ImCheckboxChecked';
+  import ImCheckboxUnchecked from 'svelte-icons-pack/im/ImCheckboxUnchecked';
   import { PALETTE } from './style';
   import { CSV_FILES } from './config';
 
@@ -29,11 +29,11 @@
   <ul>
     {#each CSV_FILES as file, idx}
       <li>
-        <button on:click={toggle(file)}>
+        <button on:click={toggle(file)} style={`--color: ${PALETTE[idx]}`}>
           {#if state[file]}
-            <Icon color={PALETTE[idx]} src={IoCheckbox} />
+            <Icon src={ImCheckboxChecked} />
           {:else}
-            <Icon color={PALETTE[idx]} src={IoCheckboxOutline} />
+            <Icon src={ImCheckboxUnchecked} />
           {/if}
         </button>
 
@@ -77,8 +77,12 @@
   }
 
   :global(.legend.by-dataset li svg) {
-    font-size: 24px;
+    font-size: 22px;
     padding-right: 8px;
     vertical-align: text-bottom;
+  }
+
+  :global(.legend.by-dataset li svg path) {
+    fill: var(--color);
   }
 </style>
