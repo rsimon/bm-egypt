@@ -21,12 +21,12 @@
   const DEFAULT_ZOOM = 5;
 
   const addData = () => {
-    Object.entries($store).forEach(([name, data], idx) => {      
+    Object.entries($store).forEach(([name, data]) => {      
       map.addSource(`source-${name}`, {
         type: 'geojson', data
       });
 
-      const color = PALETTE[idx];
+      const color = PALETTE[CSV_FILES.indexOf(name)];
 
       map.addLayer({
         ...pointStyle(color),
